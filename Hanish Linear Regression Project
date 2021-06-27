@@ -1,0 +1,70 @@
+%matplotlib inline
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+plt.rcParams['figure.figsize']=(20.0,10.0)
+
+#Reading Data
+data=pd.read_csv('headbrain.csv')
+data.head()
+
+#collecting values in form of list
+X=data['Head Size(cm^3)'].values
+Y=data['Brain Weight(grams)'].values
+
+#calculating mean
+x_mean=np.mean(X)
+y_mean=np.mean(Y)
+
+
+#Total Number of years
+n=len(X)
+
+
+#calculation of m and c of y=mx+c
+numer=0
+denom=0
+for i in range(n):
+    numer +=(X[i]-x_mean)*(Y[i]-y_mean)
+    denom +=(X[i]-x_mean) ** 2
+    
+    
+M=numer/denom
+C = y_mean-(M*x_mean)
+
+    
+    
+max_x=np.max(X)+100
+min_x=np.min(X)-100
+    
+    
+x=np.linspace(min_x,max_x,1000)   # generates a row vector x between min_x and max_x
+y= C + M*x
+     
+    
+    
+#regression line 
+plt.plot(x,y,color='#58b970',label='Regression line')
+#plotting values
+plt.scatter(X,Y,color='#ef5423',label='scatter plot')
+    
+    
+
+    
+#labelling x axis and y axis
+plt.xlabel('Head Size (cm^3)')
+plt.ylabel('Brain Weight in grams ')
+plt.legend()
+plt.plot()
+    
+    
+# Fitness check-Coefficient of Determination
+Up=0
+down=0
+for i in range(n):
+    y_pred= M * X[i] + C
+    Up+=(Y[i]-y_pred) ** 2
+    down+=(Y[i]-y_mean) ** 2
+    
+R_Square=1-(Up/down) 
+print('Coefficient of Determination is:',R_Square)
