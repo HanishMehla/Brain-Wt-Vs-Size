@@ -1,12 +1,17 @@
 %matplotlib inline
-import numpy as np
-import pandas as pd
+import numpy as np                                 
+import pandas as pd                               
 import matplotlib.pyplot as plt
-plt.rcParams['figure.figsize']=(20.0,10.0)
+plt.rcParams['figure.figsize']=(20.0,10.0)        #length and Breadth of figure
+
+
+#Training 
+
 
 #Reading Data
-data=pd.read_csv('headbrain.csv')
-data.head()
+data=pd.read_csv('headbrain.csv',nrows=150)             
+#print(data)
+#data.head()
 
 #collecting values in form of list
 X=data['Head Size(cm^3)'].values
@@ -17,7 +22,7 @@ x_mean=np.mean(X)
 y_mean=np.mean(Y)
 
 
-#Total Number of years
+
 n=len(X)
 
 
@@ -34,26 +39,23 @@ C = y_mean-(M*x_mean)
 
     
     
-max_x=np.max(X)+100
-min_x=np.min(X)-100
+max_x=np.max(X)
+min_x=np.min(X)
     
     
-x=np.linspace(min_x,max_x,1000)   # generates a row vector x between min_x and max_x
+x=np.linspace(min_x,max_x,1000)      # Returns a row vector x between min_x and max_x
 y= C + M*x
      
     
-    
+   
 #regression line 
-plt.plot(x,y,color='#58b970',label='Regression line')
+plt.plot(x,y,color='orange',label='Regression line of Training')
 #plotting values
-plt.scatter(X,Y,color='#ef5423',label='scatter plot')
-    
-    
-
+plt.scatter(X,Y,color='red',label='Scatter plot of Training')
     
 #labelling x axis and y axis
 plt.xlabel('Head Size (cm^3)')
-plt.ylabel('Brain Weight in grams ')
+plt.ylabel('Brain Weight in grams')
 plt.legend()
 plt.plot()
     
@@ -67,4 +69,67 @@ for i in range(n):
     down+=(Y[i]-y_mean) ** 2
     
 R_Square=1-(Up/down) 
-print('Coefficient of Determination is:',R_Square)
+print('Coefficient of Determination of Training is:',R_Square)
+
+
+
+
+
+
+
+
+
+
+#Testing
+
+
+
+
+
+#Reading Data
+data1=pd.read_csv('headbrain.csv',skiprows=150, nrows=230)             
+#print(data1)
+#data1.head()
+
+
+
+X1=data1['3090'].values
+Y1=data1['1168'].values
+
+max_x1=np.max(X1)
+min_x1=np.min(X1)
+
+x1=np.linspace(min_x1,max_x1,1000) 
+y1= C + M*x1
+
+
+
+#regression line 
+plt.plot(x1,y1,color='black',linestyle='dashed',label='Regression line of Testing')
+#plotting values
+plt.scatter(X1,Y1,color='violet',label='Scatter plot of Testing')
+    
+#labelling x axis and y axis
+plt.xlabel('Head Size (cm^3)')
+plt.ylabel('Brain Weight in grams')
+plt.legend()
+plt.plot()
+
+
+
+
+m=len(X1)
+#calculating mean
+x1_mean=np.mean(X1)
+y1_mean=np.mean(Y1)
+
+# Fitness check-Coefficient of Determination
+Up1=0
+down1=0
+for i in range(m):
+    y1_pred= M * X1[i] + C
+    Up1+=(Y1[i]-y1_pred) ** 2
+    down1+=(Y1[i]-y1_mean) ** 2
+    
+r_Square=1-(Up1/down1) 
+print('Coefficient of Determination of Testing is:',r_Square)
